@@ -113,6 +113,12 @@
       color: #444;
     }
     .after span { color: #666; }
+    .vibe {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #555;
+      font-style: italic;
+    }
 
     .schedule-toggle {
       background: #111;
@@ -157,7 +163,7 @@
 </head>
 <body>
   <header>
-    <h1>Vail Bus</h1>
+    <h1>🎿 Slope Shuttle</h1>
     <button class="refresh" onclick="location.reload()">↻</button>
   </header>
 
@@ -177,6 +183,7 @@
     <div class="countdown green" id="countdown">--:--</div>
     <div class="departs">Departs <span id="departs">--:--</span></div>
     <div class="after">Then <span id="after">--:--</span></div>
+    <div class="vibe" id="vibe"></div>
   </div>
 
   <button class="schedule-toggle" id="scheduleToggle">Show full schedule ▼</button>
@@ -203,10 +210,37 @@
     let currentStop = 'eaglevail';
     let currentDir = 'west';
     let nextBusSecs = null;
+    let lastVibeLevel = null;
 
     const defaultDir = { eaglevail: 'west', avon: 'east', vail: 'west' };
     const showToggle = { eaglevail: true, avon: false, vail: false };
-    const dirLabels = { west: 'to Beaver Creek', east: 'to Vail' };
+    const dirLabels = { west: 'to Beaver Creek 🏔️', east: 'to Vail 🎿' };
+
+    const vibes = {
+      chill: [
+        "Plenty of time. Grab a coffee ☕",
+        "No rush. Fresh tracks await 🎿",
+        "Relax. The mountain isn't going anywhere",
+        "Easy morning. Powder day vibes ❄️"
+      ],
+      soon: [
+        "Start walking. Goggle up! 🥽",
+        "Time to move. Adventure calls",
+        "Get going. First chair awaits ⛷️",
+        "Wrap it up. Slopes are calling"
+      ],
+      now: [
+        "Go go go! 🏃",
+        "Run for it! Fresh powder waits for no one",
+        "Move it! The mountain is calling",
+        "Hustle! Every second counts ⏱️"
+      ]
+    };
+
+    function getVibe(mins) {
+      const list = mins >= 10 ? vibes.chill : mins >= 5 ? vibes.soon : vibes.now;
+      return list[Math.floor(Math.random() * list.length)];
+    }
 
     function toAmPm(t) {
       const [h, m] = t.split(':').map(Number);
@@ -243,7 +277,13 @@
         el.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
       }
 
-      el.className = 'countdown ' + (mins >= 10 ? 'green' : mins >= 5 ? 'yellow' : 'red');
+      const level = mins >= 10 ? 'green' : mins >= 5 ? 'yellow' : 'red';
+      el.className = 'countdown ' + level;
+
+      if (level !== lastVibeLevel) {
+        lastVibeLevel = level;
+        document.getElementById('vibe').textContent = getVibe(mins);
+      }
     }
 
     function render() {
@@ -290,7 +330,9 @@
         nextBusSecs = null;
         document.getElementById('countdown').textContent = '--:--';
         document.getElementById('countdown').className = 'countdown';
+        document.getElementById('vibe').textContent = "That's a wrap for today 🌙";
       } else {
+        lastVibeLevel = null;
         updateCountdown();
       }
 
