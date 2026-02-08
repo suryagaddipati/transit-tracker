@@ -116,12 +116,16 @@ async function createWidget() {
   return widget;
 }
 
-const widget = await createWidget();
+async function run() {
+  const widget = await createWidget();
 
-if (config.runsInWidget) {
-  Script.setWidget(widget);
-} else {
-  widget.presentSmall();
+  if (config.runsInWidget) {
+    Script.setWidget(widget);
+  } else {
+    widget.presentSmall();
+  }
+
+  Script.complete();
 }
 
-Script.complete();
+run();
