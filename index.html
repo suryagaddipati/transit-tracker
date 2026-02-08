@@ -211,12 +211,14 @@
     let currentDir = 'west';
     let nextBusSecs = null;
     let lastVibeLevel = null;
+    let isGoingHome = false;
 
     const defaultDir = { eaglevail: 'west', avon: 'east', vail: 'west' };
     const showToggle = { eaglevail: true, avon: false, vail: false };
     const dirLabels = { west: 'to Beaver Creek 🏔️', east: 'to Vail 🎿' };
+    const homeDirLabel = 'heading home 🏠';
 
-    const vibes = {
+    const skiVibes = {
       chill: [
         "Plenty of time. Grab a coffee ☕",
         "No rush. Fresh tracks await 🎿",
@@ -237,7 +239,29 @@
       ]
     };
 
-    function getVibe(mins) {
+    const homeVibes = {
+      chill: [
+        "Take your time. Hot cocoa awaits ☕",
+        "No rush. Couch is waiting 🛋️",
+        "Relax. Home sweet home soon",
+        "Good day on the slopes? 🎿"
+      ],
+      soon: [
+        "Start heading over",
+        "Time to pack up",
+        "One last run... or catch this bus",
+        "Legs tired? Bus is coming"
+      ],
+      now: [
+        "Go go go! 🏃",
+        "Run! Warm shower awaits 🚿",
+        "Move it! Dinner won't cook itself",
+        "Hustle! Almost home ⏱️"
+      ]
+    };
+
+    function getVibe(mins, goingHome) {
+      const vibes = goingHome ? homeVibes : skiVibes;
       const list = mins >= 10 ? vibes.chill : mins >= 5 ? vibes.soon : vibes.now;
       return list[Math.floor(Math.random() * list.length)];
     }
@@ -282,7 +306,7 @@
 
       if (level !== lastVibeLevel) {
         lastVibeLevel = level;
-        document.getElementById('vibe').textContent = getVibe(mins);
+        document.getElementById('vibe').textContent = getVibe(mins, isGoingHome);
       }
     }
 
@@ -322,9 +346,10 @@
         return `<div class="${cls}">${toAmPm(t)}</div>`;
       }).join('');
 
+      isGoingHome = currentStop === 'vail' && currentDir === 'west';
       document.getElementById('departs').textContent = nextTime ? toAmPm(nextTime) : '--:--';
       document.getElementById('after').textContent = afterTime ? toAmPm(afterTime) : '--:--';
-      document.getElementById('destination').textContent = dirLabels[currentDir];
+      document.getElementById('destination').textContent = isGoingHome ? homeDirLabel : dirLabels[currentDir];
 
       if (!nextTime) {
         nextBusSecs = null;
