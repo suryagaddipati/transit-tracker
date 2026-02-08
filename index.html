@@ -22,7 +22,6 @@
     h1 {
       font-size: 1.5rem;
       text-align: center;
-      margin-bottom: 16px;
       color: #38bdf8;
     }
     .tabs {
@@ -114,7 +113,11 @@
   </style>
 </head>
 <body>
-  <h1>🚌 Vail Bus Tracker</h1>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <div style="width:40px;"></div>
+    <h1 style="margin:0;">🚌 Vail Bus</h1>
+    <button onclick="location.reload()" style="width:40px;height:40px;border:none;background:#1e293b;color:#94a3b8;border-radius:8px;font-size:1.2rem;cursor:pointer;">↻</button>
+  </div>
 
   <div class="tabs">
     <button class="tab active" data-stop="eaglevail">EagleVail Rd</button>
