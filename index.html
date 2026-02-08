@@ -115,6 +115,7 @@
 </head>
 <body>
   <h1>🚌 Vail Bus Tracker</h1>
+  <div id="clock" style="text-align:center;font-size:1.1rem;color:#94a3b8;margin-bottom:12px;"></div>
 
   <div class="tabs">
     <button class="tab active" data-stop="eaglevail">EagleVail Rd</button>
@@ -243,9 +244,20 @@
       });
     });
 
+    function updateClock() {
+      const d = new Date();
+      const h = d.getHours() % 12 || 12;
+      const m = d.getMinutes().toString().padStart(2, '0');
+      const s = d.getSeconds().toString().padStart(2, '0');
+      const ap = d.getHours() >= 12 ? 'PM' : 'AM';
+      document.getElementById('clock').textContent = `${h}:${m}:${s} ${ap}`;
+    }
+
     render();
     updateToggle();
+    updateClock();
     setInterval(render, 30000);
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
