@@ -245,7 +245,7 @@
           }
         }
 
-        if (nearest && minDist < 5) {
+        if (nearest && minDist < 1) {
           currentStop = nearest;
           currentDir = defaultDir[nearest];
           document.querySelectorAll('.stop').forEach(b => b.classList.remove('active'));
