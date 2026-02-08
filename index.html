@@ -115,7 +115,6 @@
 </head>
 <body>
   <h1>🚌 Vail Bus Tracker</h1>
-  <div id="clock" style="text-align:center;font-size:1.1rem;color:#94a3b8;margin-bottom:12px;"></div>
 
   <div class="tabs">
     <button class="tab active" data-stop="eaglevail">EagleVail Rd</button>
@@ -158,11 +157,6 @@
     let currentStop = 'eaglevail';
     let currentDir = 'west';
 
-    function parseTime(t) {
-      const [h, m] = t.split(':').map(Number);
-      return h * 60 + m;
-    }
-
     function toAmPm(t) {
       const [h, m] = t.split(':').map(Number);
       const suffix = h >= 12 && h < 24 ? 'p' : 'a';
@@ -170,47 +164,72 @@
       return `${hour}:${m.toString().padStart(2, '0')}${suffix}`;
     }
 
-    function formatMins(mins) {
-      if (mins < 1) return 'Now!';
-      if (mins < 60) return `in ${mins} min`;
-      const h = Math.floor(mins / 60);
-      const m = mins % 60;
-      return `in ${h}h ${m}m`;
+    function getNowSecs() {
+      const d = new Date();
+      return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
     }
 
-    function getNow() {
-      const d = new Date();
-      return d.getHours() * 60 + d.getMinutes();
+    function parseTimeSecs(t) {
+      const [h, m] = t.split(':').map(Number);
+      return h * 3600 + m * 60;
+    }
+
+    let nextBusSecs = null;
+
+    function updateCountdown() {
+      if (!nextBusSecs) return;
+      const now = getNowSecs();
+      let diff = nextBusSecs - (now < 18000 ? now + 86400 : now);
+      if (diff < 0) diff = 0;
+      const mins = Math.floor(diff / 60);
+      const secs = diff % 60;
+      if (mins >= 60) {
+        const h = Math.floor(mins / 60);
+        const m = mins % 60;
+        document.getElementById('untilNext').textContent = `${h}h ${m}m ${secs}s`;
+      } else if (mins > 0) {
+        document.getElementById('untilNext').textContent = `${mins}m ${secs}s`;
+      } else if (secs > 0) {
+        document.getElementById('untilNext').textContent = `${secs}s`;
+      } else {
+        document.getElementById('untilNext').textContent = 'Now!';
+      }
     }
 
     function render() {
       const times = schedules[currentStop][currentDir];
-      const now = getNow();
+      const now = getNowSecs();
       const container = document.getElementById('times');
 
       let nextTime = null;
-      let nextMins = Infinity;
+      let nextDiff = Infinity;
 
       container.innerHTML = times.map(t => {
-        const mins = parseTime(t);
-        let adjustedMins = mins;
-        if (mins < 300) adjustedMins += 1440;
+        const secs = parseTimeSecs(t);
+        let adjustedSecs = secs;
+        if (secs < 18000) adjustedSecs += 86400;
 
-        const diff = adjustedMins - (now < 300 ? now + 1440 : now);
+        const diff = adjustedSecs - (now < 18000 ? now + 86400 : now);
         const isPast = diff < 0;
-        const isNext = !isPast && diff < nextMins;
+        const isNext = !isPast && diff < nextDiff;
 
         if (isNext) {
-          nextMins = diff;
+          nextDiff = diff;
           nextTime = t;
+          nextBusSecs = adjustedSecs;
         }
 
         return `<div class="time ${isPast ? 'past' : ''} ${isNext ? 'next' : ''}">${toAmPm(t)}</div>`;
       }).join('');
 
       document.getElementById('nextBus').textContent = nextTime ? toAmPm(nextTime) : '--:--';
-      document.getElementById('untilNext').textContent = nextTime ? formatMins(nextMins) : 'No more buses today';
       document.getElementById('dirLabel').textContent = dirLabels[currentDir];
+      if (!nextTime) {
+        nextBusSecs = null;
+        document.getElementById('untilNext').textContent = 'No more buses today';
+      } else {
+        updateCountdown();
+      }
     }
 
     const defaultDir = { eaglevail: 'west', avon: 'east', vail: 'west' };
@@ -244,20 +263,10 @@
       });
     });
 
-    function updateClock() {
-      const d = new Date();
-      const h = d.getHours() % 12 || 12;
-      const m = d.getMinutes().toString().padStart(2, '0');
-      const s = d.getSeconds().toString().padStart(2, '0');
-      const ap = d.getHours() >= 12 ? 'PM' : 'AM';
-      document.getElementById('clock').textContent = `${h}:${m}:${s} ${ap}`;
-    }
-
     render();
     updateToggle();
-    updateClock();
     setInterval(render, 30000);
-    setInterval(updateClock, 1000);
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
