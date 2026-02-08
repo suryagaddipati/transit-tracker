@@ -128,7 +128,7 @@
   </div>
 
   <div class="now">
-    <div class="now-label">Next Bus</div>
+    <div class="now-label">Next Bus <span id="dirLabel">to Beaver Creek</span></div>
     <div class="now-time" id="nextBus">--:--</div>
     <div class="now-until" id="untilNext"></div>
   </div>
@@ -209,10 +209,12 @@
 
       document.getElementById('nextBus').textContent = nextTime ? toAmPm(nextTime) : '--:--';
       document.getElementById('untilNext').textContent = nextTime ? formatMins(nextMins) : 'No more buses today';
+      document.getElementById('dirLabel').textContent = dirLabels[currentDir];
     }
 
     const defaultDir = { eaglevail: 'west', avon: 'east', vail: 'west' };
     const showToggle = { eaglevail: true, avon: false, vail: false };
+    const dirLabels = { west: 'to Beaver Creek', east: 'to Vail' };
 
     function updateToggle() {
       const toggle = document.querySelector('.direction-toggle');
