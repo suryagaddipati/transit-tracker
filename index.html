@@ -93,15 +93,15 @@
     }
     .times {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
     }
     .time {
       background: #334155;
-      padding: 8px 4px;
+      padding: 8px 2px;
       border-radius: 6px;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
     .time.next {
       background: #4ade80;
@@ -123,7 +123,7 @@
   </div>
 
   <div class="direction-toggle">
-    <button class="direction-btn active" data-dir="west">← West (Edwards)</button>
+    <button class="direction-btn active" data-dir="west">← West (Beaver Creek)</button>
     <button class="direction-btn" data-dir="east">East (Vail) →</button>
   </div>
 
@@ -162,6 +162,13 @@
       return h * 60 + m;
     }
 
+    function toAmPm(t) {
+      const [h, m] = t.split(':').map(Number);
+      const suffix = h >= 12 && h < 24 ? 'p' : 'a';
+      const hour = h % 12 || 12;
+      return `${hour}:${m.toString().padStart(2, '0')}${suffix}`;
+    }
+
     function formatMins(mins) {
       if (mins < 1) return 'Now!';
       if (mins < 60) return `in ${mins} min`;
@@ -197,11 +204,19 @@
           nextTime = t;
         }
 
-        return `<div class="time ${isPast ? 'past' : ''} ${isNext ? 'next' : ''}">${t}</div>`;
+        return `<div class="time ${isPast ? 'past' : ''} ${isNext ? 'next' : ''}">${toAmPm(t)}</div>`;
       }).join('');
 
-      document.getElementById('nextBus').textContent = nextTime || '--:--';
+      document.getElementById('nextBus').textContent = nextTime ? toAmPm(nextTime) : '--:--';
       document.getElementById('untilNext').textContent = nextTime ? formatMins(nextMins) : 'No more buses today';
+    }
+
+    const defaultDir = { eaglevail: 'west', avon: 'east', vail: 'west' };
+    const showToggle = { eaglevail: true, avon: false, vail: false };
+
+    function updateToggle() {
+      const toggle = document.querySelector('.direction-toggle');
+      toggle.style.display = showToggle[currentStop] ? 'flex' : 'none';
     }
 
     document.querySelectorAll('.tab').forEach(btn => {
@@ -209,6 +224,10 @@
         document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentStop = btn.dataset.stop;
+        currentDir = defaultDir[currentStop];
+        document.querySelectorAll('.direction-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.direction-btn[data-dir="${currentDir}"]`).classList.add('active');
+        updateToggle();
         render();
       });
     });
@@ -223,6 +242,7 @@
     });
 
     render();
+    updateToggle();
     setInterval(render, 30000);
   </script>
 </body>
