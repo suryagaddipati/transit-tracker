@@ -346,7 +346,8 @@
         return `<div class="${cls}">${toAmPm(t)}</div>`;
       }).join('');
 
-      isGoingHome = currentStop === 'vail' && currentDir === 'west';
+      isGoingHome = (currentStop === 'vail' && currentDir === 'west') ||
+                    (currentStop === 'avon' && currentDir === 'east');
       document.getElementById('departs').textContent = nextTime ? toAmPm(nextTime) : '--:--';
       document.getElementById('after').textContent = afterTime ? toAmPm(afterTime) : '--:--';
       document.getElementById('destination').textContent = isGoingHome ? homeDirLabel : dirLabels[currentDir];
