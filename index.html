@@ -107,6 +107,12 @@
       color: #555;
     }
     .departs span { color: #888; }
+    .after {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: #444;
+    }
+    .after span { color: #666; }
 
     .schedule-toggle {
       background: #111;
@@ -170,6 +176,7 @@
     <div class="destination" id="destination">to Beaver Creek</div>
     <div class="countdown green" id="countdown">--:--</div>
     <div class="departs">Departs <span id="departs">--:--</span></div>
+    <div class="after">Then <span id="after">--:--</span></div>
   </div>
 
   <button class="schedule-toggle" id="scheduleToggle">Show full schedule ▼</button>
@@ -244,23 +251,28 @@
       const now = getNowSecs();
       const container = document.getElementById('times');
 
-      let nextTime = null;
-      let nextDiff = Infinity;
+      let upcoming = [];
+
+      times.forEach(t => {
+        const secs = parseTimeSecs(t);
+        let adjustedSecs = secs;
+        if (secs < 18000) adjustedSecs += 86400;
+        const diff = adjustedSecs - (now < 18000 ? now + 86400 : now);
+        if (diff >= 0) upcoming.push({ t, adjustedSecs, diff });
+      });
+
+      upcoming.sort((a, b) => a.diff - b.diff);
+      const nextTime = upcoming[0]?.t || null;
+      const afterTime = upcoming[1]?.t || null;
+      nextBusSecs = upcoming[0]?.adjustedSecs || null;
 
       container.innerHTML = times.map(t => {
         const secs = parseTimeSecs(t);
         let adjustedSecs = secs;
         if (secs < 18000) adjustedSecs += 86400;
-
         const diff = adjustedSecs - (now < 18000 ? now + 86400 : now);
         const isPast = diff < 0;
-        const isNext = !isPast && diff < nextDiff;
-
-        if (isNext) {
-          nextDiff = diff;
-          nextTime = t;
-          nextBusSecs = adjustedSecs;
-        }
+        const isNext = t === nextTime;
 
         let cls = 'time';
         if (isPast) cls += ' past';
@@ -271,6 +283,7 @@
       }).join('');
 
       document.getElementById('departs').textContent = nextTime ? toAmPm(nextTime) : '--:--';
+      document.getElementById('after').textContent = afterTime ? toAmPm(afterTime) : '--:--';
       document.getElementById('destination').textContent = dirLabels[currentDir];
 
       if (!nextTime) {
