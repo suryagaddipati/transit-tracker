@@ -236,14 +236,18 @@
         const lon = pos.coords.longitude;
         let nearest = null;
         let minDist = Infinity;
+        let debugInfo = `GPS: ${lat.toFixed(4)}, ${lon.toFixed(4)}\n`;
 
         for (const stop in stopCoords) {
           const d = getDistance(lat, lon, stopCoords[stop].lat, stopCoords[stop].lon);
+          debugInfo += `${stop}: ${d.toFixed(2)}mi\n`;
           if (d < minDist) {
             minDist = d;
             nearest = stop;
           }
         }
+
+        document.getElementById('vibe').textContent = debugInfo;
 
         if (nearest && minDist < 1) {
           currentStop = nearest;
