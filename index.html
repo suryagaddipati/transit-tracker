@@ -214,8 +214,8 @@
     let isGoingHome = false;
 
     const stopCoords = {
-      eaglevail: { lat: 39.6254, lon: -106.5072, name: 'EagleVail' },
-      avon: { lat: 39.6330, lon: -106.5222, name: 'Avon' },
+      eaglevail: { lat: 39.6341, lon: -106.5220, name: 'EagleVail' },
+      avon: { lat: 39.6363, lon: -106.5264, name: 'Avon' },
       vail: { lat: 39.6423, lon: -106.3736, name: 'Vail' }
     };
 
@@ -236,18 +236,13 @@
         const lon = pos.coords.longitude;
         let nearest = null;
         let minDist = Infinity;
-        let debugInfo = `GPS: ${lat.toFixed(4)}, ${lon.toFixed(4)}\n`;
-
         for (const stop in stopCoords) {
           const d = getDistance(lat, lon, stopCoords[stop].lat, stopCoords[stop].lon);
-          debugInfo += `${stop}: ${d.toFixed(2)}mi\n`;
           if (d < minDist) {
             minDist = d;
             nearest = stop;
           }
         }
-
-        alert(debugInfo);
 
         if (nearest && minDist < 1) {
           currentStop = nearest;
