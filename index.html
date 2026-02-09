@@ -264,7 +264,7 @@
       }, { timeout: 5000, maximumAge: 60000 });
     }
 
-    const defaultDir = { eaglevail: 'west', avon: 'east', walmart: 'east', vail: 'west' };
+    const defaultDir = { eaglevail: 'west', avon: 'east', walmart: 'west', vail: 'west' };
     const showToggle = { eaglevail: true, avon: false, walmart: false, vail: false };
     const dirLabels = { west: 'to Beaver Creek 🏔️', east: 'to Vail 🎿' };
     const homeDirLabel = 'heading home 🏠';
@@ -398,7 +398,7 @@
 
       isGoingHome = (currentStop === 'vail' && currentDir === 'west') ||
                     (currentStop === 'avon' && currentDir === 'east') ||
-                    (currentStop === 'walmart' && currentDir === 'east');
+                    (currentStop === 'walmart' && currentDir === 'west');
       document.getElementById('departs').textContent = nextTime ? toAmPm(nextTime) : '--:--';
       document.getElementById('destination').textContent = isGoingHome ? homeDirLabel : dirLabels[currentDir];
 
