@@ -12,12 +12,13 @@ GTFS_URL = "https://evta.org/gtfs.zip"
 EAGLEVAIL_WEST = 65   # stop 65: "HIGHWAY 6 + EAGLE VAIL RD" (westbound platform)
 EAGLEVAIL_EAST = 48   # stop 48: "HIGHWAY 6 + EAGLE VAIL RD" (eastbound platform)
 AVON = 196            # stop 196: "AVON STATION"
+WALMART = 21          # stop 21: "FAWCETT RD + YODER AVE"
 VAIL = 20             # stop 20: "VAIL TRANSPORTATION CENTER"
 
 ROUTE_ID = "HY6"
-SERVICE_ID = "1"  # weekday (Mon-Fri) winter schedule
+SERVICE_ID = "1"
 
-STOP_IDS = {EAGLEVAIL_WEST, EAGLEVAIL_EAST, AVON, VAIL}
+STOP_IDS = {EAGLEVAIL_WEST, EAGLEVAIL_EAST, AVON, WALMART, VAIL}
 
 def download_gtfs(dest_dir):
     zip_path = os.path.join(dest_dir, "gtfs.zip")
@@ -47,6 +48,7 @@ def parse(gtfs_dir):
     schedules = {
         "eaglevail": {"west": set(), "east": set()},
         "avon": {"west": set(), "east": set()},
+        "walmart": {"west": set(), "east": set()},
         "vail": {"west": set(), "east": set()},
     }
 
@@ -58,6 +60,8 @@ def parse(gtfs_dir):
                 schedules["eaglevail"]["west"].add(stops[EAGLEVAIL_WEST])
             if AVON in stops:
                 schedules["avon"]["west"].add(stops[AVON])
+            if WALMART in stops:
+                schedules["walmart"]["west"].add(stops[WALMART])
             if VAIL in stops:
                 schedules["vail"]["west"].add(stops[VAIL])
         else:
@@ -65,6 +69,8 @@ def parse(gtfs_dir):
                 schedules["eaglevail"]["east"].add(stops[EAGLEVAIL_EAST])
             if AVON in stops:
                 schedules["avon"]["east"].add(stops[AVON])
+            if WALMART in stops:
+                schedules["walmart"]["east"].add(stops[WALMART])
             if VAIL in stops:
                 schedules["vail"]["east"].add(stops[VAIL])
 
@@ -76,7 +82,7 @@ def parse(gtfs_dir):
         return [f"{int(t.split(':')[0]) % 24}:{t.split(':')[1]}" for t in sorted(times, key=sort_key)]
 
     result = {}
-    for stop in ["eaglevail", "avon", "vail"]:
+    for stop in ["eaglevail", "avon", "walmart", "vail"]:
         result[stop] = {}
         for d in ["west", "east"]:
             result[stop][d] = fmt(schedules[stop][d])
@@ -94,7 +100,7 @@ def main():
 
     print("\n// For index.html schedules object:")
     print("const schedules = {")
-    for stop in ["eaglevail", "avon", "vail"]:
+    for stop in ["eaglevail", "avon", "walmart", "vail"]:
         print(f"  {stop}: {{")
         for d in ["west", "east"]:
             times = result[stop][d]
