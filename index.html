@@ -120,6 +120,29 @@
       font-style: italic;
     }
 
+    .ride-alert {
+      background: #111;
+      border: 2px solid #333;
+      color: #888;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 16px;
+      width: 100%;
+      transition: all 0.15s;
+    }
+    .ride-alert.active {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+    .ride-alert.arrived {
+      border-color: #22c55e;
+      background: #22c55e;
+      color: #000;
+      font-weight: 600;
+    }
+
     .schedule-toggle {
       background: #111;
       border: none;
@@ -185,6 +208,7 @@
     <div class="departs">Departs <span id="departs">--:--</span></div>
     <div class="after" id="afterBuses"></div>
     <div class="vibe" id="vibe"></div>
+    <button class="ride-alert" id="rideAlert" style="display:none"></button>
   </div>
 
   <button class="schedule-toggle" id="scheduleToggle">Show full schedule ▼</button>
@@ -361,6 +385,86 @@
       }
     }
 
+    const destinations = {
+      eaglevail: { east: 'vail' },
+      avon: { east: 'vail', west: 'eaglevail' },
+      walmart: { west: 'eaglevail', east: 'vail' },
+      vail: { west: 'eaglevail' }
+    };
+
+    let rideAlertWatchId = null;
+    let rideAlertFired = false;
+
+    function getDestination() {
+      const d = destinations[currentStop];
+      return d && d[currentDir] ? d[currentDir] : null;
+    }
+
+    function startRideAlert() {
+      const dest = getDestination();
+      if (!dest || !navigator.geolocation) return;
+      rideAlertFired = false;
+      const btn = document.getElementById('rideAlert');
+      btn.textContent = '🔔 Alerting... Tap to cancel';
+      btn.className = 'ride-alert active';
+      rideAlertWatchId = navigator.geolocation.watchPosition(function(pos) {
+        const coords = stopCoords[dest];
+        const dist = getDistance(pos.coords.latitude, pos.coords.longitude, coords.lat, coords.lon);
+        const meters = dist * 1609.34;
+        if (meters < 300) {
+          rideAlertFired = true;
+          navigator.vibrate([500, 200, 500, 200, 500]);
+          btn.textContent = '✅ Arriving at ' + coords.name + '!';
+          btn.className = 'ride-alert arrived';
+          stopRideAlert(true);
+        }
+      }, function() {
+        stopRideAlert();
+      }, { enableHighAccuracy: true, maximumAge: 5000 });
+    }
+
+    function stopRideAlert(keepLabel) {
+      if (rideAlertWatchId !== null) {
+        navigator.geolocation.clearWatch(rideAlertWatchId);
+        rideAlertWatchId = null;
+      }
+      if (!keepLabel) {
+        rideAlertFired = false;
+        updateAlertButton();
+      }
+    }
+
+    function updateAlertButton() {
+      const btn = document.getElementById('rideAlert');
+      const dest = getDestination();
+      if (!dest) {
+        btn.style.display = 'none';
+        return;
+      }
+      btn.style.display = 'block';
+      if (rideAlertWatchId !== null) {
+        btn.textContent = '🔔 Alerting... Tap to cancel';
+        btn.className = 'ride-alert active';
+      } else if (rideAlertFired) {
+        btn.textContent = '✅ Arriving at ' + stopCoords[dest].name + '!';
+        btn.className = 'ride-alert arrived';
+      } else {
+        btn.textContent = '🔔 Alert me at ' + stopCoords[dest].name;
+        btn.className = 'ride-alert';
+      }
+    }
+
+    document.getElementById('rideAlert').addEventListener('click', function() {
+      if (rideAlertFired) {
+        rideAlertFired = false;
+        updateAlertButton();
+      } else if (rideAlertWatchId !== null) {
+        stopRideAlert();
+      } else {
+        startRideAlert();
+      }
+    });
+
     function render() {
       const times = schedules[currentStop][currentDir];
       const now = getNowSecs();
@@ -424,6 +528,8 @@
       }
 
       document.querySelector('.direction').style.display = showToggle[currentStop] ? 'flex' : 'none';
+      stopRideAlert();
+      updateAlertButton();
     }
 
     document.querySelectorAll('.stop').forEach(btn => {
