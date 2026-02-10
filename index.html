@@ -558,19 +558,12 @@
         return;
       }
 
-      function secsToAmPm(s) {
-        if (s >= 86400) s -= 86400;
-        const h = Math.floor(s / 3600);
-        const m = Math.floor((s % 3600) / 60);
-        return toAmPm(`${h}:${m.toString().padStart(2, '0')}`);
-      }
-
-      el.innerHTML = '<h3>🛒 Walmart Trip Planner (30min shop)</h3>' +
+      el.innerHTML = '<h3>🛒 Walmart Trip (30min shop)</h3>' +
         trips.map((trip, i) => {
           const cls = i === 0 ? 'trip next' : 'trip';
           return `<div class="${cls}"><span class="steps">` +
-            `🚌 ${toAmPm(trip.depart)} <span>→</span> 🛒 <span>→</span> 🚌 ${toAmPm(trip.returnBus)} <span>→</span> 🏠 ${secsToAmPm(trip.homeArrival)}` +
-            `</span><span style="color:#555">${trip.totalMin}m</span></div>`;
+            `🚌 ${toAmPm(trip.depart)} <span>→</span> 🛒 <span>→</span> 🚌 ${toAmPm(trip.returnBus)}` +
+            `</span></div>`;
         }).join('');
     }
 
