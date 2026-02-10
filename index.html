@@ -120,6 +120,42 @@
       font-style: italic;
     }
 
+    .trip-plan {
+      margin-top: 20px;
+      width: 100%;
+    }
+    .trip-plan h3 {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .trip {
+      background: #111;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .trip .steps {
+      color: #aaa;
+    }
+    .trip .steps span {
+      color: #555;
+    }
+    .trip.next {
+      border: 1px solid #333;
+    }
+    .trip.next .steps {
+      color: #fff;
+    }
+    .trip.next .steps span {
+      color: #888;
+    }
+
     .ride-alert {
       background: #111;
       border: 2px solid #333;
@@ -208,6 +244,7 @@
     <div class="departs">Departs <span id="departs">--:--</span></div>
     <div class="after" id="afterBuses"></div>
     <div class="vibe" id="vibe"></div>
+    <div class="trip-plan" id="tripPlan" style="display:none"></div>
     <button class="ride-alert" id="rideAlert" style="display:none"></button>
   </div>
 
@@ -465,6 +502,78 @@
       }
     });
 
+    function renderTripPlan() {
+      const el = document.getElementById('tripPlan');
+      if (currentStop !== 'walmart') {
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = 'block';
+      const now = getNowSecs();
+      const adjustedNow = now < 18000 ? now + 86400 : now;
+      const SHOP_TIME = 1800;
+      const TRANSIT_TO = 300;
+      const TRANSIT_BACK = 120;
+
+      const departures = schedules.eaglevail.east;
+      const returnBuses = schedules.walmart.west;
+
+      const trips = [];
+      for (const dep of departures) {
+        const depSecs = parseTimeSecs(dep);
+        const adjDep = depSecs < 18000 ? depSecs + 86400 : depSecs;
+        if (adjDep - adjustedNow < -60) continue;
+
+        const arriveWalmart = adjDep + TRANSIT_TO;
+        const doneShop = arriveWalmart + SHOP_TIME;
+
+        let returnBus = null;
+        for (const ret of returnBuses) {
+          const retSecs = parseTimeSecs(ret);
+          const adjRet = retSecs < 18000 ? retSecs + 86400 : retSecs;
+          if (adjRet >= doneShop) {
+            returnBus = { t: ret, secs: adjRet };
+            break;
+          }
+        }
+        if (!returnBus) continue;
+
+        const homeArrival = returnBus.secs + TRANSIT_BACK;
+        const totalMin = Math.round((homeArrival - adjDep) / 60);
+
+        trips.push({
+          depart: dep,
+          returnBus: returnBus.t,
+          homeArrival,
+          totalMin,
+          depSecs: adjDep
+        });
+
+        if (trips.length >= 3) break;
+      }
+
+      if (trips.length === 0) {
+        el.innerHTML = '';
+        el.style.display = 'none';
+        return;
+      }
+
+      function secsToAmPm(s) {
+        if (s >= 86400) s -= 86400;
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        return toAmPm(`${h}:${m.toString().padStart(2, '0')}`);
+      }
+
+      el.innerHTML = '<h3>🛒 Walmart Trip Planner (30min shop)</h3>' +
+        trips.map((trip, i) => {
+          const cls = i === 0 ? 'trip next' : 'trip';
+          return `<div class="${cls}"><span class="steps">` +
+            `🚌 ${toAmPm(trip.depart)} <span>→</span> 🛒 <span>→</span> 🚌 ${toAmPm(trip.returnBus)} <span>→</span> 🏠 ${secsToAmPm(trip.homeArrival)}` +
+            `</span><span style="color:#555">${trip.totalMin}m</span></div>`;
+        }).join('');
+    }
+
     function render() {
       const times = schedules[currentStop][currentDir];
       const now = getNowSecs();
@@ -528,6 +637,7 @@
       }
 
       document.querySelector('.direction').style.display = showToggle[currentStop] ? 'flex' : 'none';
+      renderTripPlan();
       stopRideAlert();
       updateAlertButton();
     }
