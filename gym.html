@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000">
+  <title>WAC Classes</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    .days {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .day {
+      flex: 1;
+      padding: 10px 4px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      background: transparent;
+      color: #666;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .day.active {
+      border-color: #fff;
+      background: #fff;
+      color: #000;
+    }
+    .classes { flex: 1; }
+    .class-row {
+      background: #111;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      border: 1px solid transparent;
+    }
+    .class-row.next {
+      border-color: #333;
+    }
+    .class-row.next .class-name { color: #fff; }
+    .class-row.next .class-time { color: #fff; }
+    .class-row.next .class-instructor { color: #888; }
+    .class-row.past { opacity: 0.35; }
+    .class-time {
+      min-width: 52px;
+      color: #aaa;
+      font-variant-numeric: tabular-nums;
+    }
+    .class-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .class-name {
+      color: #aaa;
+      font-weight: 500;
+    }
+    .class-instructor {
+      color: #555;
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
+    .studio-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .studio-1 { background: #1a3a2a; color: #22c55e; }
+    .studio-2 { background: #1a2a3a; color: #3b82f6; }
+    .studio-R { background: #3a2a1a; color: #f59e0b; }
+    .studio-C { background: #2a1a2a; color: #a855f7; }
+    .studio-P { background: #3a1a2a; color: #ec4899; }
+    .studio-CF { background: #2a2a1a; color: #eab308; }
+    .empty {
+      text-align: center;
+      color: #555;
+      padding: 40px 0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💪 WAC Classes</h1>
+  </header>
+
+  <div class="days" id="days"></div>
+  <div class="classes" id="classes"></div>
+
+  <script>
+    const schedule = {
+      monday: [
+        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: 'Shawn M.', studio: '1' },
+        { time: '10:00', end: '11:00', name: 'Pilates Fusion', instructor: '', studio: '2' },
+        { time: '11:30', end: '12:00', name: 'Abs & Arms', instructor: '', studio: '2' },
+        { time: '12:00', end: '12:45', name: 'Total Body Training', instructor: '', studio: '1' },
+        { time: '17:30', end: '18:45', name: 'Vinyasa Flow Yoga', instructor: '', studio: '2' },
+        { time: '18:00', end: '18:45', name: 'Total Body Training', instructor: '', studio: '1' },
+        { time: '18:45', end: '19:15', name: 'Abs & Arms', instructor: '', studio: '1' },
+        { time: '18:45', end: '19:45', name: 'Barre', instructor: '', studio: '2' },
+        { time: '19:15', end: '20:00', name: 'HIIT + Hard Core', instructor: '', studio: '1' }
+      ],
+      tuesday: [
+        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '9:30', end: '10:15', name: 'Studio Strength', instructor: '', studio: '1' },
+        { time: '10:30', end: '11:30', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '12:00', end: '12:30', name: 'Row360', instructor: '', studio: 'R' },
+        { time: '12:30', end: '13:00', name: 'Tread & Shred', instructor: '', studio: 'CF' },
+        { time: '17:30', end: '18:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '18:00', end: '19:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '18:00', end: '19:00', name: 'Pilates Mat', instructor: '', studio: '2' }
+      ],
+      wednesday: [
+        { time: '6:00', end: '6:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '9:30', end: '10:30', name: 'Barre Burn', instructor: '', studio: '2' },
+        { time: '12:00', end: '13:00', name: 'Pilates Fusion', instructor: '', studio: '2' },
+        { time: '13:00', end: '14:00', name: 'Yoga Sculpt', instructor: '', studio: '2' },
+        { time: '17:00', end: '17:30', name: 'Hard Core', instructor: '', studio: '1' },
+        { time: '17:30', end: '18:30', name: 'Vinyasa Flow Yoga', instructor: '', studio: '2' },
+        { time: '17:45', end: '18:30', name: 'Row 360', instructor: '', studio: 'R' },
+        { time: '18:00', end: '19:00', name: 'Boxing Challenge', instructor: '', studio: '1' },
+        { time: '18:45', end: '19:45', name: 'Pilates Mat', instructor: '', studio: '2' }
+      ],
+      thursday: [
+        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '10:15', end: '11:15', name: 'Pilates Fusion', instructor: '', studio: '2' },
+        { time: '11:00', end: '11:55', name: 'Aqua TBT', instructor: '', studio: 'P' },
+        { time: '12:00', end: '12:45', name: 'Row360', instructor: '', studio: 'R' },
+        { time: '17:00', end: '18:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '17:30', end: '18:30', name: 'Yoga (Multi-Level)', instructor: '', studio: '2' },
+        { time: '18:00', end: '18:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '18:45', end: '19:45', name: 'Barre', instructor: '', studio: '2' }
+      ],
+      friday: [
+        { time: '7:00', end: '8:00', name: 'Sports Training', instructor: '', studio: '1' },
+        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '10:00', end: '10:30', name: 'Row360', instructor: '', studio: 'R' },
+        { time: '10:30', end: '11:15', name: 'Studio Strength', instructor: '', studio: '1' },
+        { time: '10:30', end: '11:00', name: 'Tread + Shred', instructor: '', studio: 'CF' },
+        { time: '11:30', end: '12:30', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '12:00', end: '13:00', name: 'Pilates Mat', instructor: '', studio: '2' }
+      ],
+      saturday: [
+        { time: '8:00', end: '9:00', name: 'Yoga Sculpt', instructor: '', studio: '2' },
+        { time: '9:00', end: '9:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '9:30', end: '10:00', name: 'Les Mills CORE', instructor: '', studio: '1' },
+        { time: '10:00', end: '11:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '10:30', end: '11:15', name: 'Tread & Shred', instructor: '', studio: 'CF' },
+        { time: '11:15', end: '12:15', name: 'Boxing Challenge', instructor: '', studio: '1' }
+      ],
+      sunday: [
+        { time: '9:00', end: '10:00', name: 'BODYPUMP', instructor: '', studio: '1' },
+        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
+        { time: '10:00', end: '11:00', name: 'Barre', instructor: '', studio: '2' },
+        { time: '10:30', end: '11:00', name: 'Row 360', instructor: '', studio: 'R' },
+        { time: '11:00', end: '12:00', name: 'Zumba', instructor: '', studio: '1' },
+        { time: '11:15', end: '12:15', name: 'Pilates Mat', instructor: '', studio: '2' }
+      ]
+    };
+
+    const dayNames = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+    const dayLabels = ['Su','M','T','W','Th','F','Sa'];
+    const studioLabels = { '1': 'Studio 1', '2': 'Studio 2', 'R': 'Row', 'C': 'Cycle', 'P': 'Pool', 'CF': 'CF' };
+
+    let currentDay = dayNames[new Date().getDay()];
+
+    function toAmPm(t) {
+      const [h, m] = t.split(':').map(Number);
+      const suffix = h >= 12 ? 'p' : 'a';
+      const hour = h % 12 || 12;
+      return `${hour}:${m.toString().padStart(2, '0')}${suffix}`;
+    }
+
+    function timeToMin(t) {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function renderDays() {
+      const container = document.getElementById('days');
+      container.innerHTML = dayLabels.map((label, i) => {
+        const cls = dayNames[i] === currentDay ? 'day active' : 'day';
+        return `<button class="${cls}" data-day="${dayNames[i]}">${label}</button>`;
+      }).join('');
+      container.querySelectorAll('.day').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentDay = btn.dataset.day;
+          container.querySelectorAll('.day').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderClasses();
+        });
+      });
+    }
+
+    function renderClasses() {
+      const container = document.getElementById('classes');
+      const classes = schedule[currentDay];
+      if (!classes || classes.length === 0) {
+        container.innerHTML = '<div class="empty">No classes today</div>';
+        return;
+      }
+
+      const now = new Date();
+      const isToday = dayNames[now.getDay()] === currentDay;
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+
+      let nextIdx = -1;
+      if (isToday) {
+        for (let i = 0; i < classes.length; i++) {
+          if (timeToMin(classes[i].end) > nowMin) {
+            nextIdx = i;
+            break;
+          }
+        }
+      }
+
+      container.innerHTML = classes.map((c, i) => {
+        const endMin = timeToMin(c.end);
+        const startMin = timeToMin(c.time);
+        let cls = 'class-row';
+        if (isToday && endMin <= nowMin) cls += ' past';
+        else if (i === nextIdx) cls += ' next';
+
+        const instructorHtml = c.instructor ? `<div class="class-instructor">${c.instructor}</div>` : '';
+
+        return `<div class="${cls}">
+          <div class="class-time">${toAmPm(c.time)}</div>
+          <div class="class-info">
+            <div class="class-name">${c.name}</div>
+            ${instructorHtml}
+          </div>
+          <div class="studio-badge studio-${c.studio}">${studioLabels[c.studio]}</div>
+        </div>`;
+      }).join('');
+    }
+
+    renderDays();
+    renderClasses();
+  </script>
+</body>
+</html>
