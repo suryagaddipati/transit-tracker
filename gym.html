@@ -110,9 +110,19 @@
       padding: 40px 0;
       font-size: 0.9rem;
     }
+    .pull-indicator {
+      text-align: center;
+      color: #555;
+      font-size: 0.8rem;
+      overflow: hidden;
+      height: 0;
+      transition: height 0.2s;
+    }
+    .pull-indicator.visible { height: 32px; line-height: 32px; }
   </style>
 </head>
 <body>
+  <div class="pull-indicator" id="pullIndicator">↓ Release to refresh</div>
   <header>
     <h1>💪 WAC Classes</h1>
   </header>
@@ -269,6 +279,35 @@
 
     renderDays();
     renderClasses();
+
+    let pullStartY = 0;
+    let pulling = false;
+    const indicator = document.getElementById('pullIndicator');
+
+    document.addEventListener('touchstart', e => {
+      if (window.scrollY === 0) {
+        pullStartY = e.touches[0].clientY;
+        pulling = true;
+      }
+    });
+
+    document.addEventListener('touchmove', e => {
+      if (!pulling) return;
+      const dy = e.touches[0].clientY - pullStartY;
+      if (dy > 60) {
+        indicator.classList.add('visible');
+      } else {
+        indicator.classList.remove('visible');
+      }
+    });
+
+    document.addEventListener('touchend', () => {
+      if (indicator.classList.contains('visible')) {
+        location.reload();
+      }
+      pulling = false;
+      indicator.classList.remove('visible');
+    });
   </script>
 </body>
 </html>
