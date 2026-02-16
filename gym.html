@@ -73,7 +73,7 @@
     .class-row.next .class-instructor { color: #888; }
     .class-row.past { opacity: 0.35; }
     .class-time {
-      min-width: 52px;
+      min-width: 100px;
       color: #aaa;
       font-variant-numeric: tabular-nums;
     }
@@ -124,70 +124,70 @@
     const schedule = {
       monday: [
         { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: 'Shawn M.', studio: '1' },
-        { time: '10:00', end: '11:00', name: 'Pilates Fusion', instructor: '', studio: '2' },
-        { time: '11:30', end: '12:00', name: 'Abs & Arms', instructor: '', studio: '2' },
-        { time: '12:00', end: '12:45', name: 'Total Body Training', instructor: '', studio: '1' },
-        { time: '17:30', end: '18:45', name: 'Vinyasa Flow Yoga', instructor: '', studio: '2' },
-        { time: '18:00', end: '18:45', name: 'Total Body Training', instructor: '', studio: '1' },
-        { time: '18:45', end: '19:15', name: 'Abs & Arms', instructor: '', studio: '1' },
-        { time: '18:45', end: '19:45', name: 'Barre', instructor: '', studio: '2' },
-        { time: '19:15', end: '20:00', name: 'HIIT + Hard Core', instructor: '', studio: '1' }
+        { time: '10:00', end: '11:00', name: 'Pilates Fusion', instructor: 'Kat F.', studio: '2' },
+        { time: '11:30', end: '12:00', name: 'Abs & Arms', instructor: 'Jody B.', studio: '1' },
+        { time: '12:00', end: '12:45', name: 'Total Body Training', instructor: 'Jody B.', studio: '1' },
+        { time: '17:30', end: '18:45', name: 'Vinyasa Flow Yoga', instructor: 'Laura D.', studio: '2' },
+        { time: '18:00', end: '18:45', name: 'Total Body Training', instructor: 'Wayne C.', studio: '1' },
+        { time: '18:45', end: '19:15', name: 'Abs & Arms', instructor: 'Wayne C.', studio: '1' },
+        { time: '18:45', end: '19:45', name: 'Barre', instructor: 'Michaela V.', studio: '2' },
+        { time: '19:15', end: '20:00', name: 'HIIT + Hard Core', instructor: 'Wayne C.', studio: '1' }
       ],
       tuesday: [
-        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '9:30', end: '10:15', name: 'Studio Strength', instructor: '', studio: '1' },
-        { time: '10:30', end: '11:30', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '12:00', end: '12:30', name: 'Row360', instructor: '', studio: 'R' },
-        { time: '12:30', end: '13:00', name: 'Tread & Shred', instructor: '', studio: 'CF' },
-        { time: '17:30', end: '18:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '18:00', end: '19:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '18:00', end: '19:00', name: 'Pilates Mat', instructor: '', studio: '2' }
+        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: 'Cynthia D.', studio: '1' },
+        { time: '9:30', end: '10:15', name: 'Studio Strength', instructor: 'Traci C.', studio: '1' },
+        { time: '10:30', end: '11:30', name: 'BODYPUMP', instructor: 'Jennifer T.', studio: '1' },
+        { time: '12:00', end: '12:30', name: 'Row360', instructor: 'Julie S.', studio: 'R' },
+        { time: '12:30', end: '13:00', name: 'Tread & Shred', instructor: 'Julie S.', studio: 'CF' },
+        { time: '17:30', end: '18:20', name: 'HIT Cycle', instructor: 'Donna P.', studio: 'C' },
+        { time: '18:00', end: '19:00', name: 'BODYPUMP', instructor: 'Carli K.', studio: '1' },
+        { time: '18:00', end: '19:00', name: 'Pilates Mat', instructor: 'Penny S.', studio: '2' }
       ],
       wednesday: [
-        { time: '6:00', end: '6:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '9:30', end: '10:30', name: 'Barre Burn', instructor: '', studio: '2' },
-        { time: '12:00', end: '13:00', name: 'Pilates Fusion', instructor: '', studio: '2' },
-        { time: '13:00', end: '14:00', name: 'Yoga Sculpt', instructor: '', studio: '2' },
-        { time: '17:00', end: '17:30', name: 'Hard Core', instructor: '', studio: '1' },
-        { time: '17:30', end: '18:30', name: 'Vinyasa Flow Yoga', instructor: '', studio: '2' },
-        { time: '17:45', end: '18:30', name: 'Row 360', instructor: '', studio: 'R' },
-        { time: '18:00', end: '19:00', name: 'Boxing Challenge', instructor: '', studio: '1' },
-        { time: '18:45', end: '19:45', name: 'Pilates Mat', instructor: '', studio: '2' }
+        { time: '6:00', end: '6:50', name: 'HIT Cycle', instructor: 'Stacey H.', studio: 'C' },
+        { time: '9:30', end: '10:30', name: 'Barre Burn', instructor: 'Mindy G.', studio: '2' },
+        { time: '12:00', end: '13:00', name: 'Pilates Fusion', instructor: 'Kat F.', studio: '2' },
+        { time: '13:00', end: '14:00', name: 'Yoga Sculpt', instructor: 'Kat F.', studio: '2' },
+        { time: '17:00', end: '17:30', name: 'Hard Core', instructor: 'Laura D.', studio: '1' },
+        { time: '17:30', end: '18:30', name: 'Vinyasa Flow Yoga', instructor: 'Laura D.', studio: '2' },
+        { time: '17:45', end: '18:30', name: 'Row 360', instructor: 'Alyssa W.', studio: 'R' },
+        { time: '18:00', end: '19:00', name: 'Boxing Challenge', instructor: 'Frank R.', studio: '1' },
+        { time: '18:45', end: '19:45', name: 'Pilates Mat', instructor: 'Alyssa W.', studio: '2' }
       ],
       thursday: [
-        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '10:15', end: '11:15', name: 'Pilates Fusion', instructor: '', studio: '2' },
-        { time: '11:00', end: '11:55', name: 'Aqua TBT', instructor: '', studio: 'P' },
-        { time: '12:00', end: '12:45', name: 'Row360', instructor: '', studio: 'R' },
-        { time: '17:00', end: '18:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '17:30', end: '18:30', name: 'Yoga (Multi-Level)', instructor: '', studio: '2' },
-        { time: '18:00', end: '18:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '18:45', end: '19:45', name: 'Barre', instructor: '', studio: '2' }
+        { time: '6:00', end: '7:00', name: 'BODYPUMP', instructor: 'Joey H.', studio: '1' },
+        { time: '10:15', end: '11:15', name: 'Pilates Fusion', instructor: 'Kat F.', studio: '2' },
+        { time: '11:00', end: '11:55', name: 'Aqua TBT', instructor: 'Penny S.', studio: 'P' },
+        { time: '12:00', end: '12:45', name: 'Row360', instructor: 'Julie S.', studio: 'R' },
+        { time: '17:00', end: '18:00', name: 'BODYPUMP', instructor: 'Therese C.', studio: '1' },
+        { time: '17:30', end: '18:30', name: 'Yoga (Multi-Level)', instructor: 'Becky R.', studio: '2' },
+        { time: '18:00', end: '18:50', name: 'HIT Cycle', instructor: 'Traci C.', studio: 'C' },
+        { time: '18:45', end: '19:45', name: 'Barre', instructor: 'Michaela V.', studio: '2' }
       ],
       friday: [
-        { time: '7:00', end: '8:00', name: 'Sports Training', instructor: '', studio: '1' },
-        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '10:00', end: '10:30', name: 'Row360', instructor: '', studio: 'R' },
-        { time: '10:30', end: '11:15', name: 'Studio Strength', instructor: '', studio: '1' },
-        { time: '10:30', end: '11:00', name: 'Tread + Shred', instructor: '', studio: 'CF' },
-        { time: '11:30', end: '12:30', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '12:00', end: '13:00', name: 'Pilates Mat', instructor: '', studio: '2' }
+        { time: '7:00', end: '8:00', name: 'Sports Training', instructor: 'Mackenzie C.', studio: '1' },
+        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: 'Traci C.', studio: 'C' },
+        { time: '10:00', end: '10:30', name: 'Row360', instructor: 'Julie S.', studio: 'R' },
+        { time: '10:30', end: '11:15', name: 'Studio Strength', instructor: 'Traci C.', studio: '1' },
+        { time: '10:30', end: '11:00', name: 'Tread + Shred', instructor: 'Julie S.', studio: 'CF' },
+        { time: '11:30', end: '12:30', name: 'BODYPUMP', instructor: 'Juanita G.', studio: '1' },
+        { time: '12:00', end: '13:00', name: 'Pilates Mat', instructor: 'Penny S.', studio: '2' }
       ],
       saturday: [
-        { time: '8:00', end: '9:00', name: 'Yoga Sculpt', instructor: '', studio: '2' },
-        { time: '9:00', end: '9:50', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '9:30', end: '10:00', name: 'Les Mills CORE', instructor: '', studio: '1' },
-        { time: '10:00', end: '11:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '10:30', end: '11:15', name: 'Tread & Shred', instructor: '', studio: 'CF' },
-        { time: '11:15', end: '12:15', name: 'Boxing Challenge', instructor: '', studio: '1' }
+        { time: '8:00', end: '9:00', name: 'Yoga Sculpt', instructor: 'Scott Z.', studio: '2' },
+        { time: '9:00', end: '9:50', name: 'HIT Cycle', instructor: 'Torrie M.', studio: 'C' },
+        { time: '9:30', end: '10:00', name: 'Les Mills CORE', instructor: 'David R.', studio: '1' },
+        { time: '10:00', end: '11:00', name: 'BODYPUMP', instructor: 'David R.', studio: '1' },
+        { time: '10:30', end: '11:15', name: 'Tread & Shred', instructor: 'Michael S.', studio: 'CF' },
+        { time: '11:15', end: '12:15', name: 'Boxing Challenge', instructor: 'Frank R.', studio: '1' }
       ],
       sunday: [
-        { time: '9:00', end: '10:00', name: 'BODYPUMP', instructor: '', studio: '1' },
-        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: '', studio: 'C' },
-        { time: '10:00', end: '11:00', name: 'Barre', instructor: '', studio: '2' },
-        { time: '10:30', end: '11:00', name: 'Row 360', instructor: '', studio: 'R' },
-        { time: '11:00', end: '12:00', name: 'Zumba', instructor: '', studio: '1' },
-        { time: '11:15', end: '12:15', name: 'Pilates Mat', instructor: '', studio: '2' }
+        { time: '9:00', end: '10:00', name: 'BODYPUMP', instructor: 'Erika S.', studio: '1' },
+        { time: '9:30', end: '10:20', name: 'HIT Cycle', instructor: 'Traci C.', studio: 'C' },
+        { time: '10:00', end: '11:00', name: 'Barre', instructor: 'Aleta Z.', studio: '2' },
+        { time: '10:30', end: '11:00', name: 'Row 360', instructor: 'Traci C.', studio: 'R' },
+        { time: '11:00', end: '12:00', name: 'Zumba', instructor: 'Cedric T.', studio: '1' },
+        { time: '11:15', end: '12:15', name: 'Pilates Mat', instructor: 'Aleta Z.', studio: '2' }
       ]
     };
 
@@ -257,7 +257,7 @@
         const instructorHtml = c.instructor ? `<div class="class-instructor">${c.instructor}</div>` : '';
 
         return `<div class="${cls}">
-          <div class="class-time">${toAmPm(c.time)}</div>
+          <div class="class-time">${toAmPm(c.time)}-${toAmPm(c.end)}</div>
           <div class="class-info">
             <div class="class-name">${c.name}</div>
             ${instructorHtml}
