@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Meal Prep Cheatsheet</title>
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 18px;
+      padding-top: max(18px, env(safe-area-inset-top));
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+    header {
+      margin-bottom: 14px;
+    }
+    header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    header p {
+      color: #9ca3af;
+      margin-top: 6px;
+      font-size: 0.9rem;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .badge {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #1f2937;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .section {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .section h2 {
+      font-size: 0.95rem;
+      color: #f9fafb;
+      margin-bottom: 10px;
+    }
+    .section h3 {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .list {
+      display: grid;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+    .list span {
+      color: #9ca3af;
+    }
+    .grid-two {
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 540px) {
+      .grid-two { grid-template-columns: 1fr 1fr; }
+    }
+    .item {
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+    .item strong { color: #f8fafc; }
+    .steps {
+      display: grid;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+    .steps div {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .steps .num {
+      width: 20px;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .muted {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Meal Prep Cheatsheet</h1>
+    <p>South-Indian leaning, reflux-friendly, dairy-free. 10 meals • 2 servings each • 10-min finish.</p>
+    <div class="badge-row">
+      <div class="badge">No tomato</div>
+      <div class="badge">No chili</div>
+      <div class="badge">Dairy-free</div>
+      <div class="badge">2 servings</div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>Weekly Menu (10 meals)</h2>
+    <div class="list">
+      <div>1–2. Coconut curry + chicken + rice</div>
+      <div>3. Coconut curry + fish + rice</div>
+      <div>4. Coconut curry + chickpeas + rice</div>
+      <div>5–6. Keerai kootu + eggs + rice</div>
+      <div>7. Keerai kootu + chicken + rice</div>
+      <div>8–9. Moong dal + poriyal veg + rice</div>
+      <div>10. Moong dal + chickpeas + greens + rice</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Batch Prep Quantities (20 servings)</h2>
+    <div class="grid-two">
+      <div class="item">
+        <strong>Proteins</strong>
+        <div class="muted">Chicken 4 lb • Fish 1.5 lb • Eggs 12–14 • Chickpeas 3 cans</div>
+      </div>
+      <div class="item">
+        <strong>Carb</strong>
+        <div class="muted">Rice ~8 cups dry (≈24 cups cooked)</div>
+      </div>
+      <div class="item">
+        <strong>Veg</strong>
+        <div class="muted">Spinach 16–20 oz • Onion 4–5 • Poriyal veg 3–4 lb</div>
+      </div>
+      <div class="item">
+        <strong>Pantry</strong>
+        <div class="muted">Coconut milk 3 cans • Moong dal 3 cups • Cashews 1–1.5 cups</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Base Sauces</h2>
+    <div class="list">
+      <div><strong>Kerala Coconut Curry (4 meals):</strong> onion + ginger + garlic + cumin + coriander + turmeric + fennel + curry leaves + coconut milk.</div>
+      <div><strong>Keerai Kootu (3 meals):</strong> spinach + cooked moong + coconut + cumin + garlic + mustard/urad/curry leaves tadka.</div>
+      <div><strong>Moong Dal Base (3 meals):</strong> moong + water + turmeric + cumin + hing.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>10-Min Finish (each meal)</h2>
+    <div class="steps">
+      <div><span class="num">1</span><span>Sear protein 5–7 min.</span></div>
+      <div><span class="num">2</span><span>Add 1.5 cups base, simmer 2–3 min.</span></div>
+      <div><span class="num">3</span><span>Tadka: mustard + urad + curry leaves + garlic.</span></div>
+      <div><span class="num">4</span><span>Serve over reheated rice.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Appliance Cheats</h2>
+    <div class="list">
+      <div><strong>Instant Pot:</strong> moong dal 10 min high + 10 min natural release.</div>
+      <div><strong>Vitamix:</strong> blend curry bases smooth before final simmer.</div>
+      <div><strong>Dutch oven:</strong> sweat onions gently (no browning).</div>
+      <div><strong>Anova Oven:</strong> veg 425°F 15–20 min • chicken 375°F 18–22 min • fish 325–350°F 8–12 min.</div>
+    </div>
+  </section>
+</body>
+</html>
